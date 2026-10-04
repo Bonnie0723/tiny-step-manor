@@ -1,0 +1,11 @@
+{
+  "name":"小步庄园 — 每日任务养成",
+  "short_name":"小步庄园",
+  "description":"把每天的小任务，种成一座会长大的庄园。",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#e8f3df",
+  "theme_color":"#173c35",
+  "icons":[{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

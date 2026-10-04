@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#173c35">
+  <meta name="description" content="把每天的小任务，种成一座会长大的庄园。">
+  <title>小步庄园</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">🌱</span><div><strong>小步庄园</strong><span id="todayLabel"></span></div></div>
+      <div class="status-cluster">
+        <div class="streak" title="连续打卡"><span>🔥</span><b id="streakCount">0</b><small>天</small></div>
+        <button id="installBtn" class="ghost-btn" hidden>安装应用</button>
+        <button id="soundBtn" class="icon-btn" aria-label="切换音效" aria-pressed="true">🔊</button>
+      </div>
+    </header>
+
+    <main id="todayView">
+      <section class="world-card" aria-labelledby="worldTitle">
+        <picture><source media="(max-width: 900px)" srcset="./farm-valley-mobile.webp"><img class="world-bg" src="./farm-valley.webp" alt="阳光下的湖畔庄园、田地与远山"></picture>
+        <div class="world-shade"></div>
+        <div class="world-top game-dashboard">
+          <div class="game-stat"><small>🎯 本月目标</small><strong><span id="goalStat">0</span>/30</strong></div>
+          <div class="game-stat income-stat"><small>🪙 今日收入</small><strong id="incomeStat">0</strong></div>
+          <div class="game-stat mansion-stat"><small><span id="houseIcon">🏡</span> 豪宅</small><strong id="houseLevel">Lv.1 木屋</strong></div>
+          <div class="game-stat"><small>✅ 今天完成</small><strong id="todayStat">0/0</strong></div>
+          <div class="dashboard-progress"><span id="xpLabel">今日阳光 0 / 30</span><div class="xp-bar"><i id="xpFill"></i></div><b id="xpPercent">0%</b></div>
+        </div>
+
+        <div class="garden" id="garden" aria-label="今日成长花园"></div>
+
+        <div class="npc-bubble" role="status" aria-live="polite">
+          <div id="npcAvatar" class="npc-avatar npc-0" aria-hidden="true"></div>
+          <div class="npc-copy"><div class="npc-name"><b id="npcName">园丁阿禾</b><span id="npcRank">伙伴 1/4</span></div><p id="npcText">早上好！写下今天最重要的三件事，我们从第一颗种子开始。</p></div>
+        </div>
+      </section>
+
+      <section class="quest-panel" aria-labelledby="questTitle">
+        <div class="month-goal">
+          <div><small>本月目标</small><strong><span id="monthDone">0</span> 次打卡</strong></div>
+          <div class="month-track"><i id="monthFill"></i></div>
+          <span id="monthPercent">0%</span>
+        </div>
+        <div id="weekStrip" class="week-strip" aria-label="本周日期"></div>
+        <div class="quest-head">
+          <div><p class="eyebrow">TODAY'S QUESTS</p><h1 id="questTitle">今天，想种下什么？</h1></div>
+          <div class="day-progress"><strong id="doneCount">0/0</strong><span>今日完成</span></div>
+        </div>
+
+        <form id="quickForm" class="quick-add">
+          <label class="time-field"><span class="sr-only">行程时间</span><input id="taskTime" type="time" value="09:00" required></label>
+          <label class="sr-only" for="taskInput">输入今日任务</label>
+          <input id="taskInput" maxlength="60" autocomplete="off" placeholder="今天要完成什么？" required>
+          <button type="submit">添加</button>
+        </form>
+        <p class="checkin-rule">✓ 每打卡 1 项解锁 1 块田　💧喝水 / 休息 = 浇水</p>
+
+        <div id="taskList" class="task-list"></div>
+        <div id="emptyState" class="empty-state"><span>🪴</span><p>花圃还是空的。先种下一件今天真正想完成的事。</p></div>
+
+        <div class="quest-footer">
+          <p><span class="dot"></span><span id="saveStatus">进度已保存在此设备</span></p>
+          <button id="resetBtn" class="text-btn" type="button">开启新的一天</button>
+        </div>
+      </section>
+    </main>
+
+    <main id="manorView" class="manor-view" hidden>
+      <section class="estate-hero">
+        <img src="./farm-valley-mobile.webp" alt="我的湖畔庄园">
+        <div class="estate-overlay"></div>
+        <header class="estate-head"><button id="backToday" class="round-back" aria-label="返回今日">‹</button><div><small>MY ESTATE</small><h1>我的庄园资产</h1></div><span class="estate-level" id="estateLevel">Lv.1</span></header>
+        <div class="total-assets"><small>当前总资产</small><strong>🪙 <span id="assetTotal">5,000</span></strong><p id="assetNext">距离温暖农舍还差 5,000</p><div><i id="assetProgress"></i></div></div>
+      </section>
+      <section class="asset-sheet">
+        <div class="asset-grid">
+          <article><span>🏠</span><div><small>房产估值</small><strong id="houseAsset">3,500</strong></div></article>
+          <article><span>🌱</span><div><small>田地资产</small><strong id="fieldAsset">1,200</strong></div></article>
+          <article><span>🪙</span><div><small>可用金币</small><strong id="coinAsset">300</strong></div></article>
+          <article><span>💎</span><div><small>收藏价值</small><strong id="collectionAsset">0</strong></div></article>
+        </div>
+        <div class="asset-section-head"><div><small>土地资产</small><h2>我的田地</h2></div><strong id="plotCount">3 / 12 块</strong></div>
+        <div id="estatePlots" class="estate-plots"></div>
+        <div class="asset-section-head partner-head"><div><small>庄园团队</small><h2>已解锁伙伴</h2></div><strong id="partnerCount">1 / 4 人</strong></div>
+        <div id="partnerRail" class="partner-rail"></div>
+      </section>
+    </main>
+
+    <nav class="mobile-nav" aria-label="主导航">
+      <button id="navToday" class="active" type="button"><span>✓</span>今日</button>
+      <button id="navManor" type="button"><span>🏡</span>庄园</button>
+      <button id="mobileAdd" type="button"><span>＋</span>添加</button>
+    </nav>
+  </div>
+
+  <div id="celebration" class="celebration" aria-hidden="true"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
